@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document Archive Search</title>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700;900&family=Source+Sans+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #f1f1f1;
+            min-height: 100vh;
+            color: #333;
+        }
+
+        /* Top banner */
+        .top-banner {
+            background: #f0f0f0;
+            padding: 8px 20px;
+            font-size: 13px;
+            color: #333;
+            border-bottom: 1px solid #ddd;
+        }
+
+        /* Main header */
+        .main-header {
+            background: #162e51;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-icon {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, #d4a84b 0%, #c4942e 50%, #e8c36a 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            border: 3px solid #c4942e;
+        }
+
+        .logo-text {
+            color: white;
+        }
+
+        .logo-text .subtitle {
+            font-size: 14px;
+            font-weight: 400;
+            color: #a0b4c8;
+            letter-spacing: 0.5px;
+        }
+
+        .logo-text .title {
+            font-family: 'Merriweather', Georgia, serif;
+            font-size: 32px;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .header-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .header-links a {
+            color: #a0b4c8;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .header-links a:hover {
+            color: white;
+        }
+
+        .header-search {
+            display: flex;
+        }
+
+        .header-search input {
+            padding: 8px 12px;
+            border: none;
+            font-size: 14px;
+            width: 160px;
+        }
+
+        .header-search button {
+            background: #e8a833;
+            border: none;
+            padding: 8px 14px;
+            cursor: pointer;
+        }
+
+        .header-search button svg {
+            width: 18px;
+            height: 18px;
+            fill: #162e51;
+        }
+
+        /* Navigation */
+        .main-nav {
+            background: #323a45;
+            padding: 0 40px;
+        }
+
+        .main-nav ul {
+            display: flex;
+            list-style: none;
+            gap: 10px;
+        }
+
+        .main-nav li a {
+            display: block;
+            color: white;
+            text-decoration: none;
+            padding: 15px 20px;
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        .main-nav li a:hover {
+            background: rgba(255,255,255,0.1);
+        }
+
+        /* Breadcrumb */
+        .breadcrumb {
+            background: #dfe1e2;
+            padding: 15px 40px;
+            font-size: 14px;
+        }
+
+        .breadcrumb a {
+            color: #005ea2;
+            text-decoration: none;
+        }
+
+        .breadcrumb span {
+            color: #666;
+            margin: 0 8px;
+        }
+
+        /* Page content */
+        .page-content {
+            background: white;
+            padding: 40px;
+            margin: 0;
+        }
+
+        .page-title {
+            font-family: 'Merriweather', Georgia, serif;
+            font-size: 40px;
+            font-weight: 700;
+            color: #1b1b1b;
+            margin-bottom: 15px;
+        }
+
+        .title-underline {
+            width: 60px;
+            height: 5px;
+            background: #e8a833;
+            margin-bottom: 25px;
+        }
+
+        .share-btn {
+            display: inline-flex;
+            align-items: center;
+            background: #005ea2;
+            color: white;
+            font-size: 14px;
+            font-weight: 600;
+            text-decoration: none;
+            overflow: hidden;
+            border-radius: 3px;
+        }
+
+        .share-btn .text {
+            padding: 10px 15px;
+        }
+
+        .share-btn .arrow {
+            background: #0071bc;
+            padding: 10px 12px;
+            display: flex;
+            align-items: center;
+        }
+
+        /* Search section */
+        .search-section {
+            background: #f8f4e8;
+            padding: 50px 40px;
+        }
+
+        .search-title {
+            font-family: 'Merriweather', Georgia, serif;
+            font-size: 32px;
+            font-weight: 700;
+            color: #1b1b1b;
+            margin-bottom: 15px;
+        }
+
+        .search-underline {
+            width: 60px;
+            height: 5px;
+            background: #e8a833;
+            margin-bottom: 30px;
+        }
+
+        .search-box {
+            display: flex;
+            gap: 0;
+            max-width: 700px;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 14px 18px;
+            font-size: 16px;
+            font-family: 'Source Sans Pro', sans-serif;
+            border: 1px solid #aaa;
+            background: #fff;
+            color: #333;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #005ea2;
+            box-shadow: 0 0 0 3px rgba(0, 94, 162, 0.2);
+        }
+
+        .search-input::placeholder {
+            color: #888;
+        }
+
+        .search-btn {
+            padding: 14px 28px;
+            font-size: 16px;
+            font-family: 'Source Sans Pro', sans-serif;
+            font-weight: 600;
+            background: #005ea2;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .search-btn:hover {
+            background: #004d87;
+        }
+
+        .results-count {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #555;
+        }
+
+        /* Results Section */
+        .results-container {
+            background: #f8f4e8;
+            padding: 0 40px 50px 40px;
+        }
+
+        .results-header {
+            font-size: 14px;
+            color: #555;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .result-item {
+            margin-bottom: 25px;
+            padding-bottom: 25px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .result-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .result-title {
+            margin-bottom: 8px;
+        }
+
+        .result-title a {
+            font-family: 'Merriweather', Georgia, serif;
+            font-size: 18px;
+            font-weight: bold;
+            color: #005ea2;
+            text-decoration: underline;
+            transition: color 0.2s;
+        }
+
+        .result-title a:hover {
+            color: #003d6b;
+        }
+
+        .result-title .dataset {
+            font-family: 'Source Sans Pro', sans-serif;
+            font-weight: normal;
+            color: #333;
+            font-size: 16px;
+            margin-left: 8px;
+        }
+
+        .result-snippet {
+            font-family: Georgia, serif;
+            font-size: 14px;
+            line-height: 1.7;
+            color: #444;
+        }
+
+        .result-snippet .highlight {
+            color: #005ea2;
+            font-weight: bold;
+        }
+
+        /* No results state */
+        .no-results {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+            font-style: italic;
+        }
+
+        /* Initial state */
+        .initial-state {
+            text-align: center;
+            padding: 60px 40px;
+            color: #555;
+        }
+
+        .initial-state p {
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        /* Loading state */
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #555;
+        }
+
+        .loading::after {
+            content: '';
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #ddd;
+            border-top-color: #005ea2;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-left: 10px;
+            vertical-align: middle;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Top banner -->
+    <div class="top-banner">
+        🏛️ Document Archive Portal
+    </div>
+
+    <!-- Main header -->
+    <header class="main-header">
+        <div class="logo-section">
+            <div class="logo-icon">📁</div>
+            <div class="logo-text">
+                <div class="subtitle">Document Archive</div>
+                <div class="title">LIBRARY</div>
+            </div>
+        </div>
+        <div class="header-right">
+            <div class="header-links">
+                <a href="#">About</a>
+                <a href="#">Help</a>
+                <a href="#">Contact</a>
+            </div>
+            <div class="header-search">
+                <input type="text" placeholder="Search">
+                <button><svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg></button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="main-nav">
+        <ul>
+            <li><a href="#">About ▾</a></li>
+            <li><a href="#">Browse</a></li>
+            <li><a href="#">Collections ▾</a></li>
+            <li><a href="#">Resources ▾</a></li>
+            <li><a href="#">FAQ</a></li>
+            <li><a href="#">Contact ▾</a></li>
+        </ul>
+    </nav>
+
+    <!-- Breadcrumb -->
+    <div class="breadcrumb">
+        <a href="#">Home</a>
+        <span>›</span>
+        Document Library
+    </div>
+
+    <!-- Page content -->
+    <div class="page-content">
+        <h1 class="page-title">Document Library</h1>
+        <div class="title-underline"></div>
+        <a href="#" class="share-btn">
+            <span class="text">Share</span>
+            <span class="arrow">›</span>
+        </a>
+    </div>
+
+    <!-- Search section -->
+    <div class="search-section">
+        <h2 class="search-title">Search Full Document Library</h2>
+        <div class="search-underline"></div>
+        <div class="search-box">
+            <input type="text" class="search-input" id="searchInput" placeholder="Type to search...">
+            <button class="search-btn" id="searchBtn">Search</button>
+        </div>
+    </div>
+
+    <!-- Results -->
+
+    <div class="results-container" id="resultsContainer">
+        <div class="initial-state">
+            <p>Enter a name in the search box above to search the document archive.</p>
+            <p>Results will display matching documents and excerpts.</p>
+        </div>
+    </div>
+
+    <script>
+        const searchInput = document.getElementById('searchInput');
+        const searchBtn = document.getElementById('searchBtn');
+        const resultsContainer = document.getElementById('resultsContainer');
+
+        // Document templates with placeholders for the searched name
+        const documentTemplates = [
+            {
+                prefix: 'EFTA008',
+                dataset: 'DataSet 9',
+                snippetTemplate: (name) => `${name} Cooke <span class="highlight">${name}</span> Cooke - A Change Is Gonna Come --https://youtu.be/gbO2_077ixs <span class="highlight">${name}</span> Cooke - Blowing in the Wind --https://youtu.be/PBDdLgBO0Nw <span class="highlight">${name}</span> Cooke...-574luw <span class="highlight">${name}</span> Cooke - Twistin' The Night Away --https://youtu.be/7yIMt-aZjCo <span class="highlight">${name}</span> Cooke - Cupid --https://youtu.be/xqmWVZO5p6U <span class="highlight">${name}</span> Cooke - Feel It --https...:://youtu.be/APl6K7k7EDc <span class="highlight">${name}</span> Cooke - Wonderful World --https://youtu.be/VF6JMotbHYM <span class="highlight">${name}</span> Cooke - Having A Party --<span class="highlight">${name}</span> Cooke - Bring It On Home To Me --`
+            },
+            {
+                prefix: 'EFTA008',
+                dataset: 'DataSet 9',
+                snippetTemplate: (name) => `<span class="highlight">${name}</span> Cooke <span class="highlight">${name}</span> Cooke - A Change Is Gonna Come --https://youtu.be/gbO2_077ixs <span class="highlight">${name}</span> Cooke - Blowing in the Wind --https://youtu.be/PBDdLgBO0Nw <span class="highlight">${name}</span> Cooke...-574luw <span class="highlight">${name}</span> Cooke - Twistin' The Night Away --https://youtu.be/7yIMt-aZjCo <span class="highlight">${name}</span> Cooke - Cupid --https://youtu.be/xqmWVZO5p6U <span class="highlight">${name}</span> Cooke - Feel It --https...:://youtu.be/APl6K7k7EDc <span class="highlight">${name}</span> Cooke - Wonderful World --https://youtu.be/VF6JMotbHYM <span class="highlight">${name}</span> Cooke - Having A Party --<span class="highlight">${name}</span> Cooke - Bring It On Home To Me --`
+            },
+            {
+                prefix: 'EFTA023',
+                dataset: 'DataSet 11',
+                snippetTemplate: (name) => `Subject: RE: Meeting with <span class="highlight">${name}</span> Belzberg Jeff, <span class="highlight">${name}</span> spoke with your assistant briefly and I think they're working on something....<span class="highlight">${name}</span> is leaving for the airport now but will be in Palm Springs tonight and tomorrow - his cell is We don't have your cell. so <span class="highlight">${name}</span> wasn't able to reach...<span class="highlight">${name}</span> will be in NYC most of next week and was wanting to see you . if you were in town?`
+            },
+            {
+                prefix: 'EFTA021',
+                dataset: 'DataSet 10',
+                snippetTemplate: (name) => `To: <span class="highlight">${name}</span> Jaradeh From: Sent: Fri 2/22/2013 5:16:11 PM Subject: Re: Jeffrey Epstein Hi <span class="highlight">${name}</span> all is good not sure what the info is for but having Boris' works...Boris Nikolic >>> <span class="highlight">${name}</span> Jaradeh >>> >>> >>> >>> >>> >>> >>> >>> >>> Thank you!...>>> >>> Could you please provide me the following information for both you and <span class="highlight">${name}</span>?`
+            },
+            {
+                prefix: 'EFTA008',
+                dataset: 'DataSet 9',
+                snippetTemplate: (name) => `Enjoy <span class="highlight">${name}</span> & Dave - Hold on I'm Coming --https://youtu.be/kOLBUtbF8qM <span class="highlight">${name}</span> & Dave - Soul Man --https://youtu.be/pYh-LwbUwoQ <span class="highlight">${name}</span> & Dave - When Something...is Wrong With My Baby --https://youtu.be/T246rhSoHes <span class="highlight">${name}</span> & Dave - You Don't Know Like I Know --https://youtu.be/KJulwldx9BM <span class="highlight">${name}</span> & Dave - Wrap It Up...<span class="highlight">${name}</span> & Dave - Mustang Sally --https://youtu.be/S4inTlin83E <span class="highlight">${name}</span> & Dave - Soul Sister, Brown Sugar --https://youtu.be/VTdD4gli3LI San & Dave - I Thank`
+            },
+            {
+                prefix: 'EFTA016',
+                dataset: 'DataSet 10',
+                snippetTemplate: (name) => `Platform: iMessage Timezone: UTC+0000 <span class="highlight">${name}</span> Jaradeh oC SJ 2013/01/11 <span class="highlight">${name}</span> Jaradeh Jeffrey, it's <span class="highlight">${name}</span>. Don't know if this is your right contact....It's <span class="highlight">${name}</span>. SJ 02:55:27 am Read EFTA01620920`
+            },
+            {
+                prefix: 'EFTA019',
+                dataset: 'DataSet 8',
+                snippetTemplate: (name) => `From: <span class="highlight">${name}</span> Johnson To: Office Subject: RE: Travel arrangements Dear <span class="highlight">${name}</span>, The flight has been confirmed for next Tuesday. <span class="highlight">${name}</span> will be arriving at 3:45 PM local time. Please ensure <span class="highlight">${name}</span>'s driver is there to pick up...`
+            },
+            {
+                prefix: 'EFTA027',
+                dataset: 'DataSet 12',
+                snippetTemplate: (name) => `Meeting Notes - Attendees: <span class="highlight">${name}</span> Williams, <span class="highlight">${name}</span> Thompson, and legal counsel. <span class="highlight">${name}</span> raised concerns about the timeline. <span class="highlight">${name}</span> agreed to follow up with the documentation by Friday. Action items assigned to <span class="highlight">${name}</span>...`
+            },
+            {
+                prefix: 'EFTA031',
+                dataset: 'DataSet 7',
+                snippetTemplate: (name) => `Invoice #4521 - Services rendered to <span class="highlight">${name}</span> Estate. Billing contact: <span class="highlight">${name}</span> Martinez. Amount due: See attached. <span class="highlight">${name}</span> authorized payment on 03/15. Confirmation sent to <span class="highlight">${name}</span>'s office...`
+            },
+            {
+                prefix: 'EFTA034',
+                dataset: 'DataSet 11',
+                snippetTemplate: (name) => `Guest List - Private Event: <span class="highlight">${name}</span> Anderson (+1), <span class="highlight">${name}</span> Roberts, <span class="highlight">${name}</span> Chen, <span class="highlight">${name}</span> Davis (tentative). RSVP received from <span class="highlight">${name}</span> on behalf of the group. Seating arranged per <span class="highlight">${name}</span>'s request...`
+            }
+        ];
+
+        function generateRandomId(prefix) {
+            const num = Math.floor(Math.random() * 90000000) + 10000000;
+            return prefix + num.toString().substring(0, 5) + num.toString().substring(5);
+        }
+
+        function generateResults(searchName) {
+            // Generate 6-10 random results
+            const numResults = Math.floor(Math.random() * 5) + 6;
+            const results = [];
+            
+            // Shuffle and pick templates
+            const shuffled = [...documentTemplates].sort(() => Math.random() - 0.5);
+            
+            for (let i = 0; i < numResults; i++) {
+                const template = shuffled[i % shuffled.length];
+                const docId = generateRandomId(template.prefix);
+                results.push({
+                    id: docId,
+                    dataset: template.dataset,
+                    snippet: template.snippetTemplate(searchName)
+                });
+            }
+            
+            return results;
+        }
+
+        function renderResults(results, searchTerm) {
+            if (results.length === 0) {
+                resultsContainer.innerHTML = `
+                    <div class="no-results">
+                        No documents found matching "${searchTerm}"
+                    </div>
+                `;
+                return;
+            }
+
+            let html = `
+                <div class="results-header">
+                    Found ${results.length} documents matching "<strong>${searchTerm}</strong>"
+                </div>
+            `;
+
+            results.forEach(result => {
+                html += `
+                    <div class="result-item">
+                        <div class="result-title">
+                            <a href="#">${result.id}.pdf</a>
+                            <span class="dataset">- ${result.dataset}</span>
+                        </div>
+                        <div class="result-snippet">
+                            ${result.snippet}
+                        </div>
+                    </div>
+                `;
+            });
+
+            resultsContainer.innerHTML = html;
+        }
+
+        function performSearch() {
+            const searchTerm = searchInput.value.trim();
+            
+            if (!searchTerm) {
+                resultsContainer.innerHTML = `
+                    <div class="initial-state">
+                        <p>Please enter a name to search.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            // Show loading state
+            resultsContainer.innerHTML = `
+                <div class="loading">
+                    Searching documents
+                </div>
+            `;
+
+            // Simulate search delay
+            setTimeout(() => {
+                const results = generateResults(searchTerm);
+                renderResults(results, searchTerm);
+            }, 800);
+        }
+
+        // Event listeners
+        searchBtn.addEventListener('click', performSearch);
+        searchInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                performSearch();
+            }
+        });
+    </script>
+</body>
+</html>
